@@ -14,11 +14,11 @@ public class Pedido {
     private Long pedidoKey;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "cliente_key", nullable = false)
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "id_endereco_entrega", nullable = false)
+    @JoinColumn(name = "endereco_key", nullable = false)
     private Endereco enderecoEntrega;
 
     @Column(columnDefinition = "TIMESTAMP")
@@ -35,6 +35,9 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pagamento> pagamentos;
 
     public Long getPedidoKey() {
         return pedidoKey;
@@ -98,5 +101,13 @@ public class Pedido {
 
     public void setItens(List<ItemPedido> itens) {
         this.itens = itens;
+    }
+
+    public List<Pagamento> getPagamentos() {
+        return pagamentos;
+    }
+
+    public void setPagamentos(List<Pagamento> pagamentos) {
+        this.pagamentos = pagamentos;
     }
 }

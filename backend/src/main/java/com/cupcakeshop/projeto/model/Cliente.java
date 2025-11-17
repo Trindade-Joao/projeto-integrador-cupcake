@@ -13,7 +13,7 @@ public class Cliente {
     private Long clienteKey;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_endereco", unique = true)
+    @JoinColumn(name = "endereco_key", unique = true)
     private Endereco enderecoPrincipal;
 
     @Column(nullable = false, length = 150)

@@ -12,7 +12,7 @@ public class Produto {
     private Long produtoKey;
 
     @ManyToOne
-    @JoinColumn(name = "id_admin", nullable = false)
+    @JoinColumn(name = "administrador_key", nullable = false)
     private Administrador administrador;
 
     @Column(nullable = false, length = 100)
@@ -35,6 +35,9 @@ public class Produto {
 
     @Column(columnDefinition = "TEXT")
     private String fichaNutricional;
+
+    @Column(length = 255)
+    private String fotoUrl;
 
 
     public Long getProdutoKey() {
@@ -107,5 +110,13 @@ public class Produto {
 
     public void setFichaNutricional(String fichaNutricional) {
         this.fichaNutricional = fichaNutricional;
+    }
+
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
     }
 }

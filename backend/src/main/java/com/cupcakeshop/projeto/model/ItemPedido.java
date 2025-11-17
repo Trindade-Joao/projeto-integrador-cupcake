@@ -14,11 +14,11 @@ public class ItemPedido {
     private Long itemPedidoKey;
 
     @ManyToOne
-    @JoinColumn(name = "id_pedido", nullable = false)
+    @JoinColumn(name = "pedido_key", nullable = false)
     private Pedido pedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_produto", nullable = false)
+    @JoinColumn(name = "produto_key", nullable = false)
     private Produto produto;
 
     @Column(nullable = false)

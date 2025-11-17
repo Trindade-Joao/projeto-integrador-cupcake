@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Gerenciamento de Produtos</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 class="mb-4">Gestão de Catálogo</h1>
+
+    <div class="d-flex justify-content-end mb-3">
+        <a th:href="@{/admin/produtos/novo}" class="btn btn-primary fw-bold">
+            Adicionar Novo Cupcake
+        </a>
+    </div>
+
+    <div class="card p-4">
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-hover align-middle">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                    <th>Status</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="produto : ${produtos}">
+                    <td th:text="${produto.produtoKey}">1</td>
+                    <td th:text="${produto.nome}">Cupcake de Morango</td>
+                    <td th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">R$ 4.00</td>
+                    <td th:text="${produto.estoque}">50</td>
+                    <td>
+                        <span th:class="${produto.status == 'Ativo'} ? 'badge bg-success' : 'badge bg-secondary'" th:text="${produto.status}">Ativo</span>
+                    </td>
+                    <td class="text-center">
+                        <a th:href="@{/admin/produtos/editar/{id}(id=${produto.produtoKey})}" class="btn btn-sm btn-info me-2">Editar</a>
+
+                        <form th:action="@{/admin/produtos/desativar/{id}(id=${produto.produtoKey})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    th:if="${produto.status == 'Ativo'}"
+                                    onclick="return confirm('ATENÇÃO: Desativar remove o produto da Vitrine. Deseja continuar?')"
+                                    style="background-color: #f1a362 !important; border-color: #f1a362 !important;">
+                                Desativar
+                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary"
+                                    th:unless="${produto.status == 'Ativo'}" disabled>
+                                Desativado
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${produtos.isEmpty()}">
+                    <td colspan="6" class="text-center text-muted">Nenhum produto cadastrado.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

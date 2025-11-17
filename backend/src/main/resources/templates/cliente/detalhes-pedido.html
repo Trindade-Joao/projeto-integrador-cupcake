@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title th:text="'Detalhes do Pedido #' + ${pedido.id}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 class="mb-4">Detalhes do Pedido</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4 h-100">
+                <h3 class="card-title text-primary mb-4">Status da Entrega</h3>
+
+                <p class="lead">Pedido: <span class="fw-bold" th:text="${pedido.id}"></span></p>
+
+                <div class="status-timeline mt-4">
+                    <div th:classappend="${pedido.statusPedido == 'RECEBIDO' || pedido.statusPedido == 'EM_PREPARO' || pedido.statusPedido == 'SAIU_ENTREGA' || pedido.statusPedido == 'ENTREGUE'} ? 'status-step active' : 'status-step'">
+                        <span class="status-text">Pedido Recebido</span>
+                    </div>
+
+                    <div th:classappend="${pedido.statusPedido == 'EM_PREPARO' || pedido.statusPedido == 'SAIU_ENTREGA' || pedido.statusPedido == 'ENTREGUE'} ? 'status-step active' : 'status-step'">
+                        <span class="status-text">Em Preparação</span>
+                    </div>
+
+                    <div th:classappend="${pedido.statusPedido == 'SAIU_ENTREGA' || pedido.statusPedido == 'ENTREGUE'} ? 'status-step active' : 'status-step'">
+                        <span class="status-text">Saiu para Entrega</span>
+                    </div>
+
+                    <div th:classappend="${pedido.statusPedido == 'ENTREGUE'} ? 'status-step active' : 'status-step'">
+                        <span class="status-text">Entregue</span>
+                    </div>
+                </div>
+
+                <a href="#" class="btn btn-info mt-4">Entrar em Contato com o Suporte</a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h3 class="card-title text-primary mb-4">Resumo do Pedido</h3>
+
+                <ul class="list-unstyled">
+                    <li th:each="item : ${pedido.itens}" class="d-flex justify-content-between mb-2">
+                        <div>
+                            <span class="fw-bold" th:text="${item.produto.nome}"></span>
+                            <small class="text-secondary d-block">Qtd: <span th:text="${item.quantidade}"></span></small>
+                        </div>
+                        <span th:text="'R$ ' + ${#numbers.formatDecimal(item.precoUnitarioNaCompra.multiply(T(java.math.BigDecimal).valueOf(item.quantidade)), 1, 'POINT', 2, 'COMMA')}"></span>
+                    </li>
+                </ul>
+
+                <hr class="border-secondary">
+
+                <div class="d-flex justify-content-between">
+                    <span>Frete:</span>
+                    <span th:text="'R$ ' + ${#numbers.formatDecimal(pedido.valorFrete, 1, 'POINT', 2, 'COMMA')}"></span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold fs-5 mt-2">
+                    <span>TOTAL:</span>
+                    <span th:text="'R$ ' + ${#numbers.formatDecimal(pedido.valorTotal, 1, 'POINT', 2, 'COMMA')}" class="text-primary"></span>
+                </div>
+
+                <h5 class="mt-4 mb-3">Detalhes</h5>
+                <p class="mb-1"><strong>Endereço de Entrega:</strong> <span th:text="${pedido.enderecoEntrega.logradouro + ', ' + pedido.enderecoEntrega.numero}"></span></p>
+                <p class="mb-1"><strong>Pagamento:</strong> Mercado Pago</p>
+                <p class="mb-1"><strong>Status Pagamento:</strong> <span th:text="${pagamento.statusPagamento}"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

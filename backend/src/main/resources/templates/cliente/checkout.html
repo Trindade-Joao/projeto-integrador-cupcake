@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 class="mb-4">Finalização do Pedido</h1>
+
+    <div class="mb-4 d-flex justify-content-between text-center">
+        <div class="col active text-primary">1. Entrega</div>
+        <div class="col text-secondary">2. Pagamento</div>
+        <div class="col text-secondary">3. Revisão</div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card p-4">
+                <h3 class="card-title">Confirmação de Envio</h3>
+
+                <div th:if="${cliente.enderecoPrincipal == null}" class="alert alert-warning" role="alert">
+                    <p>Seu endereço principal não está cadastrado. Por favor, adicione-o em seu perfil.</p>
+                    <a th:href="@{/perfil}" class="btn btn-sm btn-info">Cadastrar Endereço</a>
+                </div>
+
+                <div th:unless="${cliente.enderecoPrincipal == null}">
+                    <p class="lead">Enviar para:</p>
+                    <p><strong>Rua:</strong> <span th:text="${cliente.enderecoPrincipal.logradouro + ', ' + cliente.enderecoPrincipal.numero}"></span></p>
+                    <p><strong>Bairro:</strong> <span th:text="${cliente.enderecoPrincipal.bairro}"></span></p>
+                    <p><strong>CEP:</strong> <span th:text="${cliente.enderecoPrincipal.cep}"></span></p>
+
+                    <p class="small mt-3 text-secondary">Para alterar o endereço principal, vá para a página de perfil.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card p-4">
+                <h3 class="card-title">Resumo do Pedido</h3>
+
+                <ul class="list-unstyled mb-3">
+                    <li th:each="entry : ${carrinho.itens}" class="d-flex justify-content-between">
+                        <span th:text="${entry.key.nome} + ' x ' + ${entry.value}"></span>
+                        <span th:text="'R$ ' + ${entry.key.preco.multiply(T(java.math.BigDecimal).valueOf(entry.value))}"></span>
+                    </li>
+                </ul>
+
+                <hr class="border-secondary">
+
+                <div class="d-flex justify-content-between">
+                    <span>Subtotal:</span>
+                    <span th:text="'R$ ' + ${carrinho.calcularSubtotal()}"></span>
+                </div>
+                <div classs="d-flex justify-content-between">
+                    <span>Frete:</span>
+                    <span th:text="'R$ ' + ${carrinho.getValorFrete()}"></span> (Fixo)
+                </div>
+                <div class="d-flex justify-content-between fs-5 fw-bold mt-2">
+                    <span>TOTAL:</span>
+                    <span th:text="'R$ ' + ${carrinho.calcularTotal()}" class="text-primary"></span>
+                </div>
+
+                <form th:action="@{/checkout/finalizar}" method="post" class="mt-4">
+                    <button type="submit"
+                            class="btn btn-primary w-100"
+                            th:disabled="${carrinho.itens.isEmpty() || cliente.enderecoPrincipal == null}">
+                        Pagar com Mercado Pago (HU 017)
+                    </button>
+                </form>
+
+                <p class="text-center small mt-2 text-secondary">Pagamento seguro e protegido.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

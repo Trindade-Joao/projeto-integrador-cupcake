@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title th:text="${produto.produtoKey == null ? 'Novo Cupcake' : 'Editar Cupcake'}"></title>
+</head>
+<body>
+<div layout:fragment="content" class="d-flex justify-content-center">
+
+    <div class="card p-4 shadow-lg" style="max-width: 600px; width: 100%;">
+        <div class="card-body">
+            <h1 class="card-title mb-4" th:text="${produto.produtoKey == null ? 'Cadastrar Novo Cupcake' : 'Editar Cupcake'}"></h1>
+
+            <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+
+            <form th:action="@{/admin/produtos/salvar}" th:object="${produto}" method="post">
+
+                <input type="hidden" th:field="*{produtoKey}" />
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome do Cupcake:</label>
+                    <input type="text" id="nome" class="form-control" th:field="*{nome}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição:</label>
+                    <textarea id="descricao" class="form-control" th:field="*{descricao}" rows="3" required></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="preco" class="form-label">Preço (R$):</label>
+                        <input type="number" id="preco" class="form-control" th:field="*{preco}" step="0.01" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="estoque" class="form-label">Estoque Inicial:</label>
+                        <input type="number" id="estoque" class="form-control" th:field="*{estoque}" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="tags" class="form-label">Tags / Ingredientes Chave:</label>
+                    <input type="text" id="tags" class="form-control" th:field="*{tags}" placeholder="Ex: nozes, chocolate, vegano. Usado para filtros de cliente.">
+                    <small class="form-text text-secondary">Separe por vírgulas para facilitar a busca do cliente.</small>
+                </div>
+
+                <div class="mb-4">
+                    <label for="fichaNutricional" class="form-label">Ficha Nutricional (Simplificada):</label>
+                    <textarea id="fichaNutricional" class="form-control" th:field="*{fichaNutricional}" rows="2" placeholder="Ex: Contém 250 calorias, 10g proteína."></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="fotoUrl" class="form-label">URL da Foto do Cupcake:</label>
+                    <input type="url" id="fotoUrl" class="form-control" th:field="*{fotoUrl}" required placeholder="Cole o link da imagem aqui (ex: https://dominio.com/cupcake.jpg)">
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary fw-bold" th:text="${produto.produtoKey == null ? 'Cadastrar Produto' : 'Salvar Alterações'}">Cadastrar Produto</button>
+                    <a th:href="@{/admin/produtos}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

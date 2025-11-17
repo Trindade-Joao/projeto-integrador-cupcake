@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Login</title>
+</head>
+<body>
+<div layout:fragment="content" class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Bem-vindo de volta!</h2>
+
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                E-mail ou senha incorretos.
+            </div>
+            <div th:if="${param.success}" class="alert alert-success" role="alert">
+                Cadastro realizado com sucesso! Faça login.
+            </div>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">E-mail</label>
+                    <input type="email" id="username" name="username" class="form-control" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label">Senha</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Entrar</button>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <a th:href="@{/recuperar-senha}" class="text-secondary">Esqueceu a Senha?</a>
+                    <a th:href="@{/cadastro}" class="text-primary">Criar Conta</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

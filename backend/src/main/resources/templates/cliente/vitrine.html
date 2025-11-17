@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Vitrine</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 class="mb-4 text-center">Nossas Criações Mais Doces</h1>
+
+    <div th:if="${sucesso}" class="alert alert-success" role="alert" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+
+    <div class="mb-4 p-3 bg-dark rounded">
+        <form th:action="@{/vitrine}" method="get" class="d-flex">
+            <input type="text" name="tag" class="form-control me-2"
+                   placeholder="Filtrar por ingredientes (ex: nozes, vegano)"
+                   th:value="${tagAtiva}" />
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        <div th:each="produto : ${produtos}" class="col">
+            <div class="card h-100 shadow-sm border-0">
+
+                <img th:src="${produto.fotoUrl}"
+                     alt="Cupcake"
+                     class="card-img-top"
+                     style="height: 200px; object-fit: cover;"> <div class="card-body">
+                <h5 class="card-title" th:text="${produto.nome}"></h5>
+                <p class="card-text text-secondary" th:text="${produto.descricao}"></p>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="fs-4 fw-bold text-primary" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">R$ 4,50</span>
+
+                    <a th:href="@{/carrinho/adicionar/{id}(id=${produto.produtoKey})}"
+                       class="btn btn-sm btn-primary">
+                        Adicionar
+                    </a>
+                </div>
+
+                <p th:if="${produto.estoque <= 5}" class="text-warning small mt-2">
+                    Aviso: Últimas unidades!
+                </p>
+                <p th:if="${produto.estoque == 0}" class="text-danger small mt-2">
+                    Esgotado
+                </p>
+            </div>
+            </div>
+        </div>
+
+        <div th:if="${produtos.isEmpty()}" class="col-12">
+            <div class="alert alert-warning text-center" role="alert">
+                Nenhum cupcake ativo encontrado no catálogo.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

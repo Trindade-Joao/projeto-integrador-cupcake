@@ -1,0 +1,74 @@
+---
+config:
+  layout: elk
+---
+classDiagram
+direction TB
+    class Cliente {
+	    + id_cliente: PK
+	    + id_endereco: FK  -- Novo Local da FK para Endereço Único
+	    + nome: String
+	    + email: String
+	    + cpf: String
+	    + telefone: String
+	    + data_cadastro: Date
+	    + status_conta: String
+	    + senha: String(Criptografada)
+	    + login()
+    }
+    class Endereco {
+	    + id_endereco: PK
+	    + cep: String
+	    + logradouro: String
+	    + numero: String
+	    + complemento: String
+	    + bairro: String
+	    + cidade: String
+	    + uf: String
+    }
+    class Pedido {
+	    + id_pedido: PK
+	    + id_cliente: FK
+	    + id_endereco_entrega: FK -- Endereço selecionado no momento da compra
+	    + data_pedido: DateTime
+	    + valor_total: Decimal
+	    + valor_frete: Decimal -- Fixo ou calculado de forma simples
+	    + status_pedido: String
+	    + calcularTotal()
+    }
+    class ItemPedido {
+	    + id_pedido: FK, PK
+	    + id_produto: FK, PK
+	    + quantidade: Integer
+	    + preco_unitario_na_compra: Decimal
+    }
+    class Produto {
+	    + id_produto: PK
+	    + id_admin: FK
+	    + nome: String
+	    + descricao: String
+	    + preco: Decimal
+	    + estoque: Integer
+	    + tags: String
+	    + ficha_nutricional: String
+	    + status: String
+    }
+    class Transacao {
+	    + id_transacao: PK
+	    + id_pedido: FK
+	    + status_pagamento: String -- Apenas registro de status final
+	    + id_mp: String(ID Mercado Pago)
+    }
+    class Administrador {
+	    + id_admin: PK
+	    + nome: String
+	    + email: String
+	    + senha: String
+	    + nivel_acesso: String
+    }
+    Cliente "1" -- "0..1" Endereco : tem
+    Cliente "1" -- "0..*" Pedido : faz
+    Pedido "1" -- "1..*" ItemPedido : contém
+    Produto "1" -- "0..*" ItemPedido : está_em
+    Pedido "1" -- "0..*" Transacao : pagamento
+    Administrador "1" -- "0..*" Produto : gerencia

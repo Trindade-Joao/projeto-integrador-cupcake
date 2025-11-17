@@ -1,0 +1,44 @@
+---
+config:
+  layout: elk
+title: Diagrama de Casos de Uso - Cupcake App (v2)
+---
+graph TD
+    %% Atores
+    Cliente
+    Administrador
+    SistemaExterno[Gateway de Pagamento]
+
+    %% Sistema (Box Principal)
+    subgraph Sistema
+
+        %% Casos de Uso Principais
+        subgraph areaCliente["Area do Cliente"]
+        direction TB
+        UC_A[Autenticar Usuário]
+        UC_B[Gerenciar Perfil]
+        UC_C[Navegar Catálogo]
+        UC_D[Gerenciar Carrinho]
+        UC_E[Finalizar Compra]
+        UC_F[Acompanhar Pedido]
+        end
+        subgraph painelAdministrativo["Painel Administrativo"]
+        direction TB
+        UC_G[Gerenciar Catálogo]
+        UC_H[Gerenciar Pedidos]
+        end
+    end
+
+    %% Relações dos Atores
+    Cliente --> UC_A
+    Cliente --> UC_B
+    Cliente --> UC_C
+    Cliente --> UC_D
+    Cliente --> UC_E
+    Cliente --> UC_F
+    
+    Administrador --> UC_G
+    Administrador --> UC_H
+    
+    %% Relação com Sistema Externo
+    UC_E -.-> SistemaExterno

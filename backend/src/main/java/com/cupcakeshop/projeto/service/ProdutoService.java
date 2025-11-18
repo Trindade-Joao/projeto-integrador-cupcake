@@ -1,7 +1,7 @@
 package com.cupcakeshop.projeto.service;
 
 import com.cupcakeshop.projeto.model.Produto;
-import com.cupcakeshop.projeto.model.Administrador; // Necessário para a HU 018
+import com.cupcakeshop.projeto.model.Administrador;
 import com.cupcakeshop.projeto.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
